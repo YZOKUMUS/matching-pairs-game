@@ -22,24 +22,6 @@
     <!-- Pagination controls -->
     <div id="pagination-container" class="pagination-container"></div>
 
-    <button id="add-all-files-btn">Add All Files to Git</button>
-    <button id="send-to-github-btn">Send to GitHub</button>
-
     <script src="script.js"></script>
-    <script>
-        document.getElementById('add-all-files-btn').addEventListener('click', function() {
-            fetch('/add-all-files', { method: 'POST' })
-                .then(response => response.json())
-                .then(data => alert(data.message))
-                .catch(error => console.error('Error:', error));
-        });
-
-        document.getElementById('send-to-github-btn').addEventListener('click', function() {
-            fetch('/send-to-github', { method: 'POST' })
-                .then(response => response.json())
-                .then(data => alert(data.message))
-                .catch(error => console.error('Error:', error));
-        });
-    </script>
 </body>
 </html>
