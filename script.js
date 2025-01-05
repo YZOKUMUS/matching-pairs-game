@@ -27,6 +27,8 @@ fetch('data.json')
             soundBox.classList.add("sound-box");
             soundBox.dataset.index = index;
             soundBox.textContent = "Sound " + (index + 1);
+            soundBox.setAttribute('aria-label', `Play sound for word ${index + 1}`);
+            soundBox.setAttribute('role', 'button');
 
             soundBox.addEventListener("click", () => {
                 if (soundBox.classList.contains("matched")) return;
@@ -48,6 +50,7 @@ fetch('data.json')
             wordBox.classList.add("word-box");
             wordBox.textContent = word;
             wordBox.dataset.soundIndex = soundIndex;
+            wordBox.setAttribute('aria-label', `Match the word: ${word}`);
 
             wordBox.addEventListener("click", () => {
                 if (wordBox.classList.contains("matched")) return;
@@ -81,7 +84,10 @@ fetch('data.json')
 
         // Function to reset the game
         function resetGame() {
-            currentPage = 0;
+            matchedPairs = 0;
+            selectedSoundBox = null;
+            soundColumn.innerHTML = "";
+            wordColumn.innerHTML = "";
             loadPage(currentPage);
         }
 
@@ -130,6 +136,9 @@ fetch('data.json')
             const nextButton = document.createElement("button");
             nextButton.textContent = "Next";
             nextButton.disabled = currentPage >= Math.floor(data.length / dataPerPage);
+            if (data.length % dataPerPage === 0 && currentPage === Math.floor(data.length / dataPerPage)) {
+                nextButton.disabled = true;
+            }
             nextButton.addEventListener("click", () => {
                 currentPage++;
                 loadPage(currentPage);

@@ -1,11 +1,19 @@
+/* General reset for margin and padding */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* Full viewport height for body */
 body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     background-color: #f4f4f4;
-    margin: 0;
+    overflow: hidden;
 }
 
 .game-container {
@@ -13,6 +21,8 @@ body {
     justify-content: space-between;
     width: 80%;
     max-width: 1200px;
+    height: 100%; /* Full container height */
+    overflow: auto;
 }
 
 .column {
@@ -31,6 +41,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .sound-box.selected, .word-box.selected {
@@ -63,4 +74,22 @@ button:disabled {
 
 .pagination-container {
     text-align: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .column {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .sound-box, .word-box {
+        width: 100%;
+        margin: 5px 0;
+    }
 }
