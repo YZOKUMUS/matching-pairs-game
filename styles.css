@@ -18,23 +18,24 @@ body {
 
 .game-container {
     display: flex;
-    justify-content: space-between;
-    width: 80%;
-    max-width: 1200px;
-    height: 100%; /* Full container height */
-    overflow: auto;
+    width: 25%; /* Kelime kart genişliği */
+    max-width: 800px;
+    height: 60%; /* kelime kartı yüksekliği */
+    overflow: auto; /* Taşma için kaydırma */
+    padding: 0; /* İç boşluk yok */
+    gap: 2%; /* Sütunlar arasında boşluk yok */
 }
 
 .column {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 48%;
+    flex-wrap: wrap; /* Kutular bir alt satıra geçebilir */
+    justify-content: flex-start; /* Kutular birbirine yapışık şekilde hizalanır */
+    width: 49.5%; /* Sütunlar tamamen bitişik olur */
+    margin: 0; /* Sütunlar arasında boşluk yok */
 }
 
 .sound-box, .word-box {
-    width: 48%;
-    margin: 10px;
+    width: 100%; /* Kutular sütun genişliğini tamamen kaplar */
     padding: 10px;
     text-align: center;
     background-color: #ddd;
@@ -42,6 +43,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    margin: 1px 0; /* Dikeyde çok küçük bir boşluk */
 }
 
 .sound-box.selected, .word-box.selected {
@@ -90,6 +92,6 @@ button:disabled {
 
     .sound-box, .word-box {
         width: 100%;
-        margin: 5px 0;
+        margin: 3px 0; /* Mobilde biraz boşluk bırakılır */
     }
 }
