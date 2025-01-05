@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+
+.game-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 1200px;
+}
+
+.column {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 48%;
+}
+
+.sound-box, .word-box {
+    width: 48%;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    background-color: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.sound-box.selected, .word-box.selected {
+    background-color: #ff9800;
+}
+
+.sound-box.matched, .word-box.matched {
+    background-color: #4caf50;
+    cursor: not-allowed;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px 5px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-container {
+    text-align: center;
+}
