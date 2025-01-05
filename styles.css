@@ -52,6 +52,10 @@ button {
     cursor: pointer;
 }
 
+button.reset {
+    background-color: #f44336;
+}
+
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;

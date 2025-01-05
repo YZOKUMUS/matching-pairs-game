@@ -65,6 +65,9 @@ fetch('data.json')
                         if (currentPage < Math.floor(data.length / dataPerPage)) {
                             currentPage++;
                             loadPage(currentPage);
+                        } else {
+                            alert("You've matched all pairs in the game!");
+                            resetGame();
                         }
                     }
                 } else if (selectedSoundBox) {
@@ -74,6 +77,12 @@ fetch('data.json')
             });
 
             return wordBox;
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            currentPage = 0;
+            loadPage(currentPage);
         }
 
         // Load data for the current page
