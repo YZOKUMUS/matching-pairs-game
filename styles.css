@@ -1,97 +1,69 @@
-/* General reset for margin and padding */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-}
-
-/* Full viewport height for body */
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    background-color: #f4f4f4;
-    overflow: hidden;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f5f5f5;
 }
 
-.game-container {
+#game-container {
     display: flex;
-    width: 25%; /* Kelime kart genişliği */
-    max-width: 800px;
-    height: 60%; /* kelime kartı yüksekliği */
-    overflow: auto; /* Taşma için kaydırma */
-    padding: 0; /* İç boşluk yok */
-    gap: 2%; /* Sütunlar arasında boşluk yok */
+    justify-content: space-around;
+    width: 90%;
+    margin: 20px 0;
 }
 
 .column {
+    width: 45%;
     display: flex;
-    flex-wrap: wrap; /* Kutular bir alt satıra geçebilir */
-    justify-content: flex-start; /* Kutular birbirine yapışık şekilde hizalanır */
-    width: 49.5%; /* Sütunlar tamamen bitişik olur */
-    margin: 0; /* Sütunlar arasında boşluk yok */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 .sound-box, .word-box {
-    width: 100%; /* Kutular sütun genişliğini tamamen kaplar */
-    padding: 10px;
-    text-align: center;
-    background-color: #ddd;
+    width: 100px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: white;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    margin: 1px 0; /* Dikeyde çok küçük bir boşluk */
+    text-align: center;
 }
 
-.sound-box.selected, .word-box.selected {
-    background-color: #ff9800;
+.sound-box.selected {
+    background-color: #add8e6;
 }
 
-.sound-box.matched, .word-box.matched {
-    background-color: #4caf50;
-    cursor: not-allowed;
+.matched {
+    background-color: #90ee90;
+    pointer-events: none;
+}
+
+#pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
 
 button {
+    margin: 0 5px;
     padding: 10px 20px;
-    margin: 10px 5px;
-    background-color: #4caf50;
-    color: white;
     border: none;
+    background-color: #007bff;
+    color: white;
     border-radius: 5px;
     cursor: pointer;
-}
-
-button.reset {
-    background-color: #f44336;
 }
 
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-}
-
-.pagination-container {
-    text-align: center;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    .game-container {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .column {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .sound-box, .word-box {
-        width: 100%;
-        margin: 3px 0; /* Mobilde biraz boşluk bırakılır */
-    }
 }
