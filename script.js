@@ -3,216 +3,201 @@ let currentPage = 0;
 let dataPerPage = 10;
 let currentData = [];
 let currentMatchedItems = new Set(); // Keep track of matched items on the current page
+let data = []; // Initialize the global data array
 
 // Helper function to save the game state
 function saveGameState() {
-    const gameState = {
-        currentPage,
-        matchedItems: Array.from(currentMatchedItems),
-    };
-    localStorage.setItem("gameState", JSON.stringify(gameState));
+    try {
+        const gameState = {
+            currentPage,
+            matchedItems: Array.from(currentMatchedItems),
+        };
+        localStorage.setItem("gameState", JSON.stringify(gameState));
+    } catch (e) {
+        console.error("Failed to save game state:", e);
+    }
 }
 
 // Helper function to load the game state
 function loadGameState() {
-    const savedState = localStorage.getItem("gameState");
-    if (savedState) {
-        const { currentPage: savedPage, matchedItems: savedMatchedItems } = JSON.parse(savedState);
-        currentPage = savedPage || 0;
-        currentMatchedItems = new Set(savedMatchedItems || []);
+    try {
+        const savedState = localStorage.getItem("gameState");
+        if (savedState) {
+            const { currentPage: savedPage, matchedItems: savedMatchedItems } = JSON.parse(savedState);
+            currentPage = savedPage || 0;
+            currentMatchedItems = new Set(savedMatchedItems || []);
+        }
+    } catch (e) {
+        console.error("Failed to load game state:", e);
     }
 }
 
-
 // Shuffle function to randomize the order
-function shuffleData() {
-    // Ensure both sound and word are shuffled together
-    for (let i = currentData.length - 1; i > 0; i--) {
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [currentData[i], currentData[j]] = [currentData[j], currentData[i]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
+}
+
+// Function to create sound box
+function createSoundBox(soundUrl, index) {
+    const soundBox = document.createElement("div");
+    soundBox.classList.add("sound-box");
+    soundBox.dataset.index = index;
+    soundBox.textContent = "Sound " + (index + 1);
+    soundBox.setAttribute("aria-label", `Play sound for word ${index + 1}`);
+    soundBox.setAttribute("role", "button");
+
+    if (currentMatchedItems.has(index)) {
+        soundBox.classList.add("matched");
+    }
+
+    soundBox.addEventListener("click", () => {
+        if (soundBox.classList.contains("matched")) return;
+        const audio = new Audio(soundUrl);
+        audio.play().catch((error) => console.error("Audio playback failed:", error));
+        const selectedSoundBox = document.querySelector(".sound-box.selected");
+        if (selectedSoundBox) {
+            selectedSoundBox.classList.remove("selected");
+        }
+        soundBox.classList.add("selected");
+    });
+
+    return soundBox;
+}
+
+// Function to create word box
+function createWordBox(word, soundIndex) {
+    const wordBox = document.createElement("div");
+    wordBox.classList.add("word-box");
+    wordBox.textContent = word;
+    wordBox.dataset.soundIndex = soundIndex;
+    wordBox.setAttribute("aria-label", `Match the word: ${word}`);
+
+    if (currentMatchedItems.has(soundIndex)) {
+        wordBox.classList.add("matched");
+    }
+
+    wordBox.addEventListener("click", (event) => {
+        handleWordBoxClick(event, soundIndex);
+    });
+
+    return wordBox;
+}
+
+// Handle word box click
+function handleWordBoxClick(event, soundIndex) {
+    const wordBox = event.currentTarget;
+    if (wordBox.classList.contains("matched")) return;
+
+    const selectedSoundBox = document.querySelector(".sound-box.selected");
+    if (selectedSoundBox && parseInt(selectedSoundBox.dataset.index) === soundIndex) {
+        wordBox.classList.add("matched");
+        selectedSoundBox.classList.add("matched");
+        wordBox.setAttribute("aria-label", `Matched word: ${wordBox.textContent}`);
+        selectedSoundBox.setAttribute("aria-label", `Matched sound`);
+        currentMatchedItems.add(soundIndex);
+        saveGameState(); // Save progress
+
+        if (currentMatchedItems.size === currentData.length) {
+            alert("Tüm eşleşmeleri tamamladınız!");
+            if (currentPage < Math.floor(data.length / dataPerPage)) {
+                currentPage++;
+                saveGameState(); // Save page progress
+                loadPage(currentPage);
+            } else {
+                alert("Oyunu başarıyla tamamladınız!");
+                resetGame();
+            }
+        }
+    } else if (selectedSoundBox) {
+        selectedSoundBox.classList.remove("selected");
+    }
+}
+
+// Function to reset the game
+function resetGame() {
+    currentPage = 0;
+    currentMatchedItems.clear();
+    saveGameState(); // Reset progress
+    loadPage(currentPage);
 }
 
 // Load data for the current page
 function loadPage(page) {
+    const soundColumn = document.getElementById("sound-column");
+    const wordColumn = document.getElementById("word-column");
+    const paginationContainer = document.getElementById("pagination-container");
+
     soundColumn.innerHTML = "";
     wordColumn.innerHTML = "";
     currentMatchedItems.clear();
 
     const start = page * dataPerPage;
-    const end = start + dataPerPage;
+    const end = Math.min(start + dataPerPage, data.length);
     currentData = data.slice(start, end);
 
-    shuffleData();  // Shuffle both sound and word together
+    if (currentData.length === 0) {
+        alert("Gösterilecek veri yok!");
+        return;
+    }
 
-    currentData.forEach((item, index) => {
-        soundColumn.appendChild(createSoundBox(item.sound_url, index));
-        wordColumn.appendChild(createWordBox(item.turkish_meaning, index));
+    shuffleArray(currentData);
+
+    // Separate sound and word data, shuffle individually, and interleave
+    const sounds = currentData.map((item, index) => createSoundBox(item.sound_url, index));
+    const words = currentData.map((item, index) => createWordBox(item.turkish_meaning, index));
+    shuffleArray(sounds);
+    shuffleArray(words);
+
+    const maxLength = Math.max(sounds.length, words.length);
+    for (let i = 0; i < maxLength; i++) {
+        if (sounds[i]) soundColumn.appendChild(sounds[i]);
+        if (words[i]) wordColumn.appendChild(words[i]);
+    }
+
+    updatePaginationButtons(paginationContainer);
+}
+
+// Pagination control
+function updatePaginationButtons(paginationContainer) {
+    paginationContainer.innerHTML = "";
+
+    const previousButton = document.createElement("button");
+    previousButton.textContent = "Önceki";
+    previousButton.disabled = currentPage === 0;
+    previousButton.addEventListener("click", () => {
+        currentPage--;
+        saveGameState();
+        loadPage(currentPage);
     });
 
-    updatePaginationButtons();
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Sonraki";
+    nextButton.disabled = currentPage >= Math.floor((data.length - 1) / dataPerPage);
+    nextButton.addEventListener("click", () => {
+        currentPage++;
+        saveGameState();
+        loadPage(currentPage);
+    });
+
+    paginationContainer.appendChild(previousButton);
+    paginationContainer.appendChild(nextButton);
 }
+
 // Initialize the game
 fetch("data.json")
     .then((response) => response.json())
-    .then((data) => {
-        const soundColumn = document.getElementById("sound-column");
-        const wordColumn = document.getElementById("word-column");
-        const paginationContainer = document.getElementById("pagination-container");
-
-        let selectedSoundBox = null;
-
-        // Load the saved state
+    .then((dataResponse) => {
+        if (!dataResponse || dataResponse.length === 0) {
+            throw new Error("JSON dosyasında veri bulunamadı.");
+        }
+        data = dataResponse;
         loadGameState();
-
-        // Shuffle function to randomize the order
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        // Function to create sound box
-        function createSoundBox(soundUrl, index) {
-            const soundBox = document.createElement("div");
-            soundBox.classList.add("sound-box");
-            soundBox.dataset.index = index;
-            soundBox.textContent = "Sound " + (index + 1);
-            soundBox.setAttribute("aria-label", `Play sound for word ${index + 1}`);
-            soundBox.setAttribute("role", "button");
-
-            if (currentMatchedItems.has(index)) {
-                soundBox.classList.add("matched");
-            }
-
-            soundBox.addEventListener("click", () => {
-                if (soundBox.classList.contains("matched")) return;
-                const audio = new Audio(soundUrl);
-                audio.play().catch((error) => console.error("Audio playback failed:", error));
-                if (selectedSoundBox) {
-                    selectedSoundBox.classList.remove("selected");
-                }
-                selectedSoundBox = soundBox;
-                selectedSoundBox.classList.add("selected");
-            });
-
-            return soundBox;
-        }
-
-        // Function to create word box
-        function createWordBox(word, soundIndex) {
-            const wordBox = document.createElement("div");
-            wordBox.classList.add("word-box");
-            wordBox.textContent = word;
-            wordBox.dataset.soundIndex = soundIndex;
-            wordBox.setAttribute("aria-label", `Match the word: ${word}`);
-
-            if (currentMatchedItems.has(soundIndex)) {
-                wordBox.classList.add("matched");
-            }
-
-            wordBox.addEventListener("click", (event) => {
-                handleWordBoxClick(event, soundIndex);
-            });
-
-            return wordBox;
-        }
-
-        // Handle word box click
-        function handleWordBoxClick(event, soundIndex) {
-            const wordBox = event.currentTarget;
-            if (wordBox.classList.contains("matched")) return;
-
-            if (selectedSoundBox && parseInt(selectedSoundBox.dataset.index) === soundIndex) {
-                wordBox.classList.add("matched");
-                selectedSoundBox.classList.add("matched");
-                wordBox.setAttribute("aria-label", `Matched word: ${wordBox.textContent}`);
-                selectedSoundBox.setAttribute("aria-label", `Matched sound`);
-                currentMatchedItems.add(soundIndex);
-                saveGameState(); // Save progress
-                selectedSoundBox = null;
-
-                if (currentMatchedItems.size === currentData.length) {
-                    alert("You've matched all pairs on this page!");
-                    if (currentPage < Math.floor(data.length / dataPerPage)) {
-                        currentPage++;
-                        saveGameState(); // Save page progress
-                        loadPage(currentPage);
-                    } else {
-                        alert("You've matched all pairs in the game!");
-                        resetGame();
-                    }
-                }
-            } else if (selectedSoundBox) {
-                selectedSoundBox.classList.remove("selected");
-                selectedSoundBox = null;
-            }
-        }
-
-        // Function to reset the game
-        function resetGame() {
-            currentPage = 0;
-            currentMatchedItems.clear();
-            saveGameState(); // Reset progress
-            loadPage(currentPage);
-        }
-
-        // Load data for the current page
-        function loadPage(page) {
-            soundColumn.innerHTML = "";
-            wordColumn.innerHTML = "";
-            currentMatchedItems.clear();
-
-            const start = page * dataPerPage;
-            const end = start + dataPerPage;
-            currentData = data.slice(start, end);
-
-            if (currentData.length === 0) {
-                alert("No data to display!");
-                return;
-            }
-
-            shuffleArray(currentData); // Shuffle the data
-
-            currentData.forEach((item, index) => {
-                soundColumn.appendChild(createSoundBox(item.sound_url, index));
-                wordColumn.appendChild(createWordBox(item.turkish_meaning, index));
-            });
-
-            updatePaginationButtons();
-        }
-
-        // Pagination control
-        function updatePaginationButtons() {
-            paginationContainer.innerHTML = "";
-
-            const previousButton = document.createElement("button");
-            previousButton.textContent = "Previous";
-            previousButton.disabled = currentPage === 0;
-            previousButton.addEventListener("click", () => {
-                currentPage--;
-                saveGameState();
-                loadPage(currentPage);
-            });
-
-            const nextButton = document.createElement("button");
-            nextButton.textContent = "Next";
-            nextButton.disabled = currentPage >= Math.floor((data.length - 1) / dataPerPage);
-            nextButton.addEventListener("click", () => {
-                currentPage++;
-                saveGameState();
-                loadPage(currentPage);
-            });
-
-            paginationContainer.appendChild(previousButton);
-            paginationContainer.appendChild(nextButton);
-        }
-
-        // Initial load of the current page (from saved state)
         loadPage(currentPage);
     })
     .catch((error) => {
-        console.error("Error loading the JSON data:", error);
-        alert("Failed to load game data. Please try again later.");
+        console.error("JSON verisi yüklenirken hata oluştu:", error);
+        alert("Oyun verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.");
     });
