@@ -1,17 +1,15 @@
-// Global variables for pagination and score
+// Global variables for pagination and scoring
 let currentPage = 0;
 let dataPerPage = 10;
 let currentData = [];
-let currentMatchedItems = new Set(); // Keep track of matched items on the current page
-let data = []; // Initialize the global data array
-let score = parseInt(localStorage.getItem("score")) || 0; // Initialize score from localStorage
+let currentMatchedItems = new Set();
+let data = [];
+let score = 0; // Initialize score
 
-// Update score display
+// Helper function to update score display
 function updateScoreDisplay() {
     const scoreElement = document.getElementById("score");
-    if (scoreElement) {
-        scoreElement.textContent = score;
-    }
+    scoreElement.textContent = score;
 }
 
 // Helper function to save the game state
@@ -37,11 +35,11 @@ function loadGameState() {
             currentPage = savedPage || 0;
             currentMatchedItems = new Set(savedMatchedItems || []);
             score = savedScore || 0;
+            updateScoreDisplay(); // Update score display after loading
         }
     } catch (e) {
         console.error("Failed to load game state:", e);
     }
-    updateScoreDisplay();
 }
 
 // Shuffle function to randomize the order
@@ -110,15 +108,15 @@ function handleWordBoxClick(event, soundIndex) {
         wordBox.setAttribute("aria-label", `Matched word: ${wordBox.textContent}`);
         selectedSoundBox.setAttribute("aria-label", `Matched sound`);
         currentMatchedItems.add(soundIndex);
-        score++; // Increment score
-        updateScoreDisplay();
+        score++; // Increment score for correct match
+        updateScoreDisplay(); // Update score display
         saveGameState(); // Save progress
 
         if (currentMatchedItems.size === currentData.length) {
             alert("Tüm eşleşmeleri tamamladınız!");
             if (currentPage < Math.floor(data.length / dataPerPage)) {
                 currentPage++;
-                saveGameState(); // Save page progress
+                saveGameState();
                 loadPage(currentPage);
             } else {
                 alert("Oyunu başarıyla tamamladınız!");
