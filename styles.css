@@ -12,21 +12,24 @@ body {
 
 #game-container {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column; /* Daha küçük ekranlar için sütun düzeni */
+    align-items: center;
     width: 90%;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .column {
-    width: 45%;
+    width: 100%; /* Tam genişlik */
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+    margin-bottom: 10px; /* Kolonlar arası boşluk */
 }
 
 .sound-box, .word-box {
-    width: 100px;
+    width: 22%; /* Ekranın genişliğine göre oran */
+    max-width: 100px; /* Maksimum genişlik */
     height: 50px;
     display: flex;
     align-items: center;
@@ -36,6 +39,7 @@ body {
     background-color: white;
     cursor: pointer;
     text-align: center;
+    font-size: 14px; /* Daha küçük metin */
 }
 
 .sound-box.selected {
@@ -61,9 +65,37 @@ button {
     color: white;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 14px; /* Daha küçük metin */
 }
 
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+/* Medya Sorguları */
+@media (max-width: 768px) {
+    .sound-box, .word-box {
+        width: 45%; /* Daha küçük cihazlar için genişlik */
+        height: 40px;
+        font-size: 12px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sound-box, .word-box {
+        width: 90%; /* Küçük ekranlar için tam genişlik */
+        height: 35px;
+        font-size: 10px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
 }
