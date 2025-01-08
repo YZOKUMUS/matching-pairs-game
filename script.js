@@ -1,9 +1,18 @@
-// Global variables for pagination
+// Global variables for pagination and score
 let currentPage = 0;
 let dataPerPage = 10;
 let currentData = [];
 let currentMatchedItems = new Set(); // Keep track of matched items on the current page
 let data = []; // Initialize the global data array
+let score = parseInt(localStorage.getItem("score")) || 0; // Initialize score from localStorage
+
+// Update score display
+function updateScoreDisplay() {
+    const scoreElement = document.getElementById("score");
+    if (scoreElement) {
+        scoreElement.textContent = score;
+    }
+}
 
 // Helper function to save the game state
 function saveGameState() {
@@ -11,6 +20,7 @@ function saveGameState() {
         const gameState = {
             currentPage,
             matchedItems: Array.from(currentMatchedItems),
+            score,
         };
         localStorage.setItem("gameState", JSON.stringify(gameState));
     } catch (e) {
@@ -23,13 +33,15 @@ function loadGameState() {
     try {
         const savedState = localStorage.getItem("gameState");
         if (savedState) {
-            const { currentPage: savedPage, matchedItems: savedMatchedItems } = JSON.parse(savedState);
+            const { currentPage: savedPage, matchedItems: savedMatchedItems, score: savedScore } = JSON.parse(savedState);
             currentPage = savedPage || 0;
             currentMatchedItems = new Set(savedMatchedItems || []);
+            score = savedScore || 0;
         }
     } catch (e) {
         console.error("Failed to load game state:", e);
     }
+    updateScoreDisplay();
 }
 
 // Shuffle function to randomize the order
@@ -98,6 +110,8 @@ function handleWordBoxClick(event, soundIndex) {
         wordBox.setAttribute("aria-label", `Matched word: ${wordBox.textContent}`);
         selectedSoundBox.setAttribute("aria-label", `Matched sound`);
         currentMatchedItems.add(soundIndex);
+        score++; // Increment score
+        updateScoreDisplay();
         saveGameState(); // Save progress
 
         if (currentMatchedItems.size === currentData.length) {
@@ -120,6 +134,7 @@ function handleWordBoxClick(event, soundIndex) {
 function resetGame() {
     currentPage = 0;
     currentMatchedItems.clear();
+    score = 0; // Reset score
     saveGameState(); // Reset progress
     loadPage(currentPage);
 }
@@ -145,7 +160,6 @@ function loadPage(page) {
 
     shuffleArray(currentData);
 
-    // Separate sound and word data, shuffle individually, and interleave
     const sounds = currentData.map((item, index) => createSoundBox(item.sound_url, index));
     const words = currentData.map((item, index) => createWordBox(item.turkish_meaning, index));
     shuffleArray(sounds);
