@@ -103,12 +103,20 @@ function handleWordBoxClick(event, soundIndex) {
 
     const selectedSoundBox = document.querySelector(".sound-box.selected");
     if (selectedSoundBox && parseInt(selectedSoundBox.dataset.index) === soundIndex) {
-        wordBox.classList.add("matched");
-        selectedSoundBox.classList.add("matched");
+        // Add "matched" and "disappear" classes
+        wordBox.classList.add("matched", "disappear");
+        selectedSoundBox.classList.add("matched", "disappear");
+
+        // Remove matched items from DOM after a short delay
+        setTimeout(() => {
+            wordBox.remove();
+            selectedSoundBox.remove();
+        }, 500);
+
         wordBox.setAttribute("aria-label", `Matched word: ${wordBox.textContent}`);
         selectedSoundBox.setAttribute("aria-label", `Matched sound`);
         currentMatchedItems.add(soundIndex);
-        score++; // Increment score for correct match
+        score++; // Increment score
         updateScoreDisplay(); // Update score display
         saveGameState(); // Save progress
 
