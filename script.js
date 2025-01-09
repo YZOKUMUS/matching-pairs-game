@@ -88,30 +88,30 @@ function createSoundBox(soundUrl, index) {
 
 
 // Function to create word box
-function createWordBox(word, soundIndex) {
-    const wordBox = document.createElement("div");
-    wordBox.classList.add("word-box");
-    wordBox.textContent = word;
-    wordBox.dataset.soundIndex = soundIndex;
-    wordBox.setAttribute("aria-label", `Match the word: ${word}`);
+function createWordBox(word, soundIndex) {         /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+    const wordBox = document.createElement("div");  /* word: kelime */
+    wordBox.classList.add("word-box");             /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+    wordBox.textContent = word;               /* word: kelime */
+    wordBox.dataset.soundIndex = soundIndex;        /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+    wordBox.setAttribute("aria-label", `Match the word: ${word}`);          /* word: kelime */
 
-    if (currentMatchedItems.has(soundIndex)) {
-        wordBox.classList.add("matched");
+    if (currentMatchedItems.has(soundIndex)) {          /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+        wordBox.classList.add("matched");                   
     }
 
-    wordBox.addEventListener("click", (event) => {
-        handleWordBoxClick(event, soundIndex);
+    wordBox.addEventListener("click", (event) => {              /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+        handleWordBoxClick(event, soundIndex);        /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
     });
 
     return wordBox;
 }
 
 // Handle word box click
-function handleWordBoxClick(event, soundIndex) {
-    const wordBox = event.currentTarget;
-    if (wordBox.classList.contains("matched")) return;
+function handleWordBoxClick(event, soundIndex) {            /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */        
+    const wordBox = event.currentTarget;            /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+    if (wordBox.classList.contains("matched")) return;      /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
 
-    const selectedSoundBox = document.querySelector(".sound-box.selected");
+    const selectedSoundBox = document.querySelector(".sound-box.selected");     /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
     if (selectedSoundBox && parseInt(selectedSoundBox.dataset.index) === soundIndex) {
         // Add "matched" and "disappear" classes
         wordBox.classList.add("matched", "disappear");

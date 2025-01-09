@@ -1,29 +1,29 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;     /* Yazı tipi */
+    margin: 0;                          /* Kenar boşluğu */
+    padding: 0;                         /* İç boşluk */
+    display: flex;                      /* Kutuları yatay düzende hizalamak için */
+    flex-direction: column;             /* Kutuları sütun düzende hizalamak için */
+    align-items: center;               /* Kutuları yatayda ortalamak için */
+    justify-content: center;            /* Kutuları dikeyde ortalamak için */
+    height: 100vh;                      /* Ekranın tamamını kaplamak için */
+    background-color: #8990f3;          /* Arka plan rengi */
 }
 
-#score-container {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 10px;
-    color: #333;
-    text-align: center;
+#score-container {            /* Puan kutusu */
+    font-size: 20px;            /* Yazı tipi boyutu */
+    font-weight: bold;          /* Kalın yazı tipi */
+    margin: 10px;               /* Kenar boşluğu */
+    color: #333;                /* Yazı rengi */
+    text-align: center;         /* Metni ortalamak için */
 }
 
-#game-container {
-    display: flex;
+#game-container {       /* Oyun kutusu */
+    display: flex;      /* Kutuları yatay düzende hizalamak için */
     flex-direction: column; /* Daha küçük ekranlar için sütun düzeni */
-    align-items: center;
-    width: 90%;
-    margin: 10px 0;
+    align-items: center;            /* Kutuları yatayda ortalamak için */
+    width: 90%;         /* Kutunun genişliği */
+    margin: 10px 0;     /* Kenar boşluğu */
 }
 
 .column {
@@ -38,25 +38,25 @@ body {
 .sound-box, .word-box {
     width: 22%; /* Ekranın genişliğine göre oran */
     max-width: 100px; /* Maksimum genişlik */
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: white;
+    height: 50px;                   /* Kutu yüksekliği */
+    display: flex;                  /* Kutuları yatay düzende hizalamak için */
+    align-items: center;            /* Metni yatayda ortalamak için */
+    justify-content: center;        /* Metni ortalamak için */
+    border: 1px solid #ccc;     /* Kenar çizgisi */
+    border-radius: 5px;             /* Köşeleri yuvarlamak için */
+    background-color: rgba(255, 255, 255, 0);        /* Arka plan rengi */
     cursor: pointer;
     text-align: center;
     font-size: 14px; /* Daha küçük metin */
 }
 
 .sound-box.selected {
-    background-color: #add8e6;
+    background-color: #19b6eb;      /* Seçilen kutunun arka plan rengi */
 }
 
 .matched {
-    background-color: #90ee90;
-    pointer-events: none;
+    background-color: #90ee90;      /* Eşleşen kutunun arka plan rengi */
+    pointer-events: none;               /* Eşleşen kutuya tıklanamaz */
 }
 
 #pagination-container {
@@ -65,13 +65,13 @@ body {
     margin-top: 10px;
 }
 
-button {
+button {                                    /* Düğme stilleri */
     margin: 0 5px;
     padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
+    border: none;                           /* Kenar çizgisi yok */
+    background-color: #007bff;          /* Düğme rengi */
+    color: white;                           /* Yazı rengi */    
+    border-radius: 5px;                     /* Köşeleri yuvarlamak için */
     cursor: pointer;
     font-size: 14px; /* Daha küçük metin */
 }
