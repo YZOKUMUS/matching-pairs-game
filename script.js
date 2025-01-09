@@ -60,7 +60,7 @@ function createSoundBox(soundUrl, index) {
 
     // Ses simgesi için img etiketi oluştur
     const soundIcon = document.createElement("img");
-    soundIcon.src = "p.png"; // Eğer dosya kök dizindeyse
+    soundIcon.src = "P.png"; // Eğer dosya kök dizindeyse
     soundIcon.alt = "Ses çal"; // Erişilebilirlik açıklaması
     soundIcon.classList.add("sound-icon");
 
