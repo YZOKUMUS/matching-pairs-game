@@ -55,9 +55,17 @@ function createSoundBox(soundUrl, index) {
     const soundBox = document.createElement("div");
     soundBox.classList.add("sound-box");
     soundBox.dataset.index = index;
-    soundBox.textContent = "Sound " + (index + 1);
     soundBox.setAttribute("aria-label", `Play sound for word ${index + 1}`);
     soundBox.setAttribute("role", "button");
+
+    // Ses simgesi için img etiketi oluştur
+    const soundIcon = document.createElement("img");
+    soundIcon.src = "p.png"; // Eğer dosya kök dizindeyse
+    soundIcon.alt = "Ses çal"; // Erişilebilirlik açıklaması
+    soundIcon.classList.add("sound-icon");
+
+    // İkonu soundBox'a ekle
+    soundBox.appendChild(soundIcon);
 
     if (currentMatchedItems.has(index)) {
         soundBox.classList.add("matched");
@@ -76,6 +84,8 @@ function createSoundBox(soundUrl, index) {
 
     return soundBox;
 }
+
+
 
 // Function to create word box
 function createWordBox(word, soundIndex) {

@@ -111,3 +111,9 @@ button:disabled {
     opacity: 0;
     transition: opacity 0.5s ease;
 }
+.sound-icon {
+    width: 40px; /* Simgenin genişliği */
+    height: 40px; /* Simgenin yüksekliği */
+    display: block;
+    margin: auto; /* Simgeyi kutu içinde ortalamak için */
+}
