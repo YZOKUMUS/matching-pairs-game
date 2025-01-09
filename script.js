@@ -35,7 +35,7 @@ function loadGameState() {
             currentPage = savedPage || 0;
             currentMatchedItems = new Set(savedMatchedItems || []);
             score = savedScore || 0;
-            updateScoreDisplay();
+            updateScoreDisplay(); // Update score display after loading
         }
     } catch (e) {
         console.error("Failed to load game state:", e);
@@ -50,7 +50,7 @@ function shuffleArray(array) {
     }
 }
 
-// Function to create sound box
+// Ses kutusu oluşturma fonksiyonu
 function createSoundBox(arabicWord, index) {
     const soundBox = document.createElement("div");
     soundBox.classList.add("sound-box");
@@ -58,9 +58,9 @@ function createSoundBox(arabicWord, index) {
     soundBox.setAttribute("aria-label", `Ses oynat: ${arabicWord}`);
     soundBox.setAttribute("role", "button");
 
-    // Sound icon
+    // Ses simgesi için img etiketi oluşturma
     const soundIcon = document.createElement("img");
-    soundIcon.src = "P.png"; // Replace with the correct path to the icon
+    soundIcon.src = "P.png"; // Gerekirse doğru yolu buraya ekleyin
     soundIcon.alt = "Ses oynat";
     soundIcon.classList.add("sound-icon");
 
@@ -72,17 +72,14 @@ function createSoundBox(arabicWord, index) {
 
     soundBox.addEventListener("click", () => {
         if (soundBox.classList.contains("matched")) return;
-
-        // Check if speech synthesis is supported
-        if (!('speechSynthesis' in window)) {
-            alert("Tarayıcınız sesli okuma özelliğini desteklemiyor.");
-            return;
-        }
-
+        
+        // Arapça kelimeyi okutmak için SpeechSynthesis API kullanma
         const utterance = new SpeechSynthesisUtterance(arabicWord);
-        utterance.lang = 'ar-SA'; // Arabic language code
+        utterance.lang = 'ar-SA';  // Arapça için dil kodu (Suudi Arabistan)
+    
+        // Sesin oynatılması
         speechSynthesis.speak(utterance);
-
+    
         const selectedSoundBox = document.querySelector(".sound-box.selected");
         if (selectedSoundBox) {
             selectedSoundBox.classList.remove("selected");
@@ -92,6 +89,8 @@ function createSoundBox(arabicWord, index) {
 
     return soundBox;
 }
+
+
 
 // Function to create word box
 function createWordBox(word, soundIndex) {
@@ -127,8 +126,10 @@ function handleWordBoxClick(event, soundIndex) {
             selectedSoundBox.remove();
         }, 500);
 
+        wordBox.setAttribute("aria-label", `Matched word: ${wordBox.textContent}`);
+        selectedSoundBox.setAttribute("aria-label", `Matched sound`);
         currentMatchedItems.add(soundIndex);
-        score++;
+        score++; // Increment score
         updateScoreDisplay();
         saveGameState();
 
@@ -148,7 +149,7 @@ function handleWordBoxClick(event, soundIndex) {
     }
 }
 
-// Reset the game
+// Function to reset the game
 function resetGame() {
     currentPage = 0;
     currentMatchedItems.clear();
@@ -178,18 +179,24 @@ function loadPage(page) {
 
     shuffleArray(currentData);
 
-    const sounds = currentData.map((item, index) => createSoundBox(item.arabic_word, index));
+    const sounds = currentData.map((item, index) => createSoundBox(item.sound_url, index));
     const words = currentData.map((item, index) => createWordBox(item.turkish_meaning, index));
     shuffleArray(sounds);
     shuffleArray(words);
 
-    sounds.forEach((sound) => soundColumn.appendChild(sound));
-    words.forEach((word) => wordColumn.appendChild(word));
+    const fragmentSounds = document.createDocumentFragment();
+    const fragmentWords = document.createDocumentFragment();
+
+    sounds.forEach((sound) => fragmentSounds.appendChild(sound));
+    words.forEach((word) => fragmentWords.appendChild(word));
+
+    soundColumn.appendChild(fragmentSounds);
+    wordColumn.appendChild(fragmentWords);
 
     updatePaginationButtons(paginationContainer);
 }
 
-// Update pagination buttons
+// Pagination control
 function updatePaginationButtons(paginationContainer) {
     paginationContainer.innerHTML = "";
 
