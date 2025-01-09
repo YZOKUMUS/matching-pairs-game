@@ -50,21 +50,20 @@ function shuffleArray(array) {
     }
 }
 
-// Function to create sound box
-function createSoundBox(soundUrl, index) {
+// Ses kutusu oluşturma fonksiyonu
+function createSoundBox(arabicWord, index) {
     const soundBox = document.createElement("div");
     soundBox.classList.add("sound-box");
     soundBox.dataset.index = index;
-    soundBox.setAttribute("aria-label", `Play sound for word ${index + 1}`);
+    soundBox.setAttribute("aria-label", `Ses oynat: ${arabicWord}`);
     soundBox.setAttribute("role", "button");
 
-    // Ses simgesi için img etiketi oluştur
+    // Ses simgesi için img etiketi oluşturma
     const soundIcon = document.createElement("img");
-    soundIcon.src = "P.png"; // Eğer dosya kök dizindeyse
-    soundIcon.alt = "Ses çal"; // Erişilebilirlik açıklaması
+    soundIcon.src = "P.png"; // Gerekirse doğru yolu buraya ekleyin
+    soundIcon.alt = "Ses oynat";
     soundIcon.classList.add("sound-icon");
 
-    // İkonu soundBox'a ekle
     soundBox.appendChild(soundIcon);
 
     if (currentMatchedItems.has(index)) {
@@ -73,8 +72,14 @@ function createSoundBox(soundUrl, index) {
 
     soundBox.addEventListener("click", () => {
         if (soundBox.classList.contains("matched")) return;
-        const audio = new Audio(soundUrl);
-        audio.play().catch((error) => console.error("Audio playback failed:", error));
+
+        // Arapça kelimeyi okutmak için SpeechSynthesis API kullanma
+        const utterance = new SpeechSynthesisUtterance(arabicWord);
+        utterance.lang = 'ar-SA';  // Arapça için dil kodu (Suudi Arabistan)
+
+        // Sesin oynatılması
+        speechSynthesis.speak(utterance);
+
         const selectedSoundBox = document.querySelector(".sound-box.selected");
         if (selectedSoundBox) {
             selectedSoundBox.classList.remove("selected");
@@ -88,36 +93,34 @@ function createSoundBox(soundUrl, index) {
 
 
 // Function to create word box
-function createWordBox(word, soundIndex) {         /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
-    const wordBox = document.createElement("div");  /* word: kelime */
-    wordBox.classList.add("word-box");             /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
-    wordBox.textContent = word;               /* word: kelime */
-    wordBox.dataset.soundIndex = soundIndex;        /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
-    wordBox.setAttribute("aria-label", `Match the word: ${word}`);          /* word: kelime */
+function createWordBox(word, soundIndex) {
+    const wordBox = document.createElement("div");
+    wordBox.classList.add("word-box");
+    wordBox.textContent = word;
+    wordBox.dataset.soundIndex = soundIndex;
+    wordBox.setAttribute("aria-label", `Match the word: ${word}`);
 
-    if (currentMatchedItems.has(soundIndex)) {          /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
-        wordBox.classList.add("matched");                   
+    if (currentMatchedItems.has(soundIndex)) {
+        wordBox.classList.add("matched");
     }
 
-    wordBox.addEventListener("click", (event) => {              /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
-        handleWordBoxClick(event, soundIndex);        /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+    wordBox.addEventListener("click", (event) => {
+        handleWordBoxClick(event, soundIndex);
     });
 
     return wordBox;
 }
 
 // Handle word box click
-function handleWordBoxClick(event, soundIndex) {            /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */        
-    const wordBox = event.currentTarget;            /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
-    if (wordBox.classList.contains("matched")) return;      /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+function handleWordBoxClick(event, soundIndex) {
+    const wordBox = event.currentTarget;
+    if (wordBox.classList.contains("matched")) return;
 
-    const selectedSoundBox = document.querySelector(".sound-box.selected");     /* soundIndex: sesin hangi kelimeye ait olduğunu belirtir */
+    const selectedSoundBox = document.querySelector(".sound-box.selected");
     if (selectedSoundBox && parseInt(selectedSoundBox.dataset.index) === soundIndex) {
-        // Add "matched" and "disappear" classes
         wordBox.classList.add("matched", "disappear");
         selectedSoundBox.classList.add("matched", "disappear");
 
-        // Remove matched items from DOM after a short delay
         setTimeout(() => {
             wordBox.remove();
             selectedSoundBox.remove();
@@ -127,8 +130,8 @@ function handleWordBoxClick(event, soundIndex) {            /* soundIndex: sesin
         selectedSoundBox.setAttribute("aria-label", `Matched sound`);
         currentMatchedItems.add(soundIndex);
         score++; // Increment score
-        updateScoreDisplay(); // Update score display
-        saveGameState(); // Save progress
+        updateScoreDisplay();
+        saveGameState();
 
         if (currentMatchedItems.size === currentData.length) {
             alert("Tüm eşleşmeleri tamamladınız!");
@@ -150,8 +153,8 @@ function handleWordBoxClick(event, soundIndex) {            /* soundIndex: sesin
 function resetGame() {
     currentPage = 0;
     currentMatchedItems.clear();
-    score = 0; // Reset score
-    saveGameState(); // Reset progress
+    score = 0;
+    saveGameState();
     loadPage(currentPage);
 }
 
@@ -181,11 +184,14 @@ function loadPage(page) {
     shuffleArray(sounds);
     shuffleArray(words);
 
-    const maxLength = Math.max(sounds.length, words.length);
-    for (let i = 0; i < maxLength; i++) {
-        if (sounds[i]) soundColumn.appendChild(sounds[i]);
-        if (words[i]) wordColumn.appendChild(words[i]);
-    }
+    const fragmentSounds = document.createDocumentFragment();
+    const fragmentWords = document.createDocumentFragment();
+
+    sounds.forEach((sound) => fragmentSounds.appendChild(sound));
+    words.forEach((word) => fragmentWords.appendChild(word));
+
+    soundColumn.appendChild(fragmentSounds);
+    wordColumn.appendChild(fragmentWords);
 
     updatePaginationButtons(paginationContainer);
 }
@@ -217,17 +223,20 @@ function updatePaginationButtons(paginationContainer) {
 }
 
 // Initialize the game
-fetch("data.json")
-    .then((response) => response.json())
-    .then((dataResponse) => {
+async function initializeGame() {
+    try {
+        const response = await fetch("data.json");
+        const dataResponse = await response.json();
         if (!dataResponse || dataResponse.length === 0) {
             throw new Error("JSON dosyasında veri bulunamadı.");
         }
         data = dataResponse;
         loadGameState();
         loadPage(currentPage);
-    })
-    .catch((error) => {
+    } catch (error) {
         console.error("JSON verisi yüklenirken hata oluştu:", error);
         alert("Oyun verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.");
-    });
+    }
+}
+
+initializeGame();
