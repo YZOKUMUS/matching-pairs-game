@@ -72,13 +72,9 @@ function createSoundBox(arabicWord, index) {
 
     soundBox.addEventListener("click", () => {
         if (soundBox.classList.contains("matched")) return;
-        
-        // Arapça kelimeyi okutmak için SpeechSynthesis API kullanma
-        const utterance = new SpeechSynthesisUtterance(arabicWord);
-        utterance.lang = 'ar-SA';  // Arapça için dil kodu (Suudi Arabistan)
     
-        // Sesin oynatılması
-        speechSynthesis.speak(utterance);
+        const audio = new Audio(arabicWord); // Arapça kelime yerine sound_url kullanılmalı
+        audio.play();
     
         const selectedSoundBox = document.querySelector(".sound-box.selected");
         if (selectedSoundBox) {
