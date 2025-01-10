@@ -1,42 +1,165 @@
+/* Genel stil ayarları */
 body {
-    font-family: Arial, sans-serif;     /* Font ailesi */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    min-height: 100vh;
 }
 
-#game-container {                       /* Oyun alanı */
-    max-width: 700px;                   /* Maksimum genişlik */ 
-    margin: 0 auto;                     /* Ortala */
-    text-align: center;                 /* Metni ortala */
+header {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.column {                           /* Sütunlar */
-    display: flex;                      /* Flexbox */
-    flex-wrap: wrap;                    
-    justify-content: center;                /* Yatayda ortala */
+h1 {
+    color: #333;
 }
 
-.sound-box, .word-box {                 /* Ses ve kelime kutuları */
-    margin: 10px;                       /* Kenar boşluğu */
-    padding: 10px;                      /* İç boşluk */
-    background: #f0f0f0;            /* Arka plan rengi */
-    border: 1px solid #ccc;             /* Kenar çizgisi */
-    border-radius: 5px;         /* Kenar yuvarlama */   
-    cursor: pointer;                /* İmleç tipi */
+#score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
 }
 
-.sound-box.matched, .word-box.matched {             /* Eşleşen kutular */
-    background: #c8e6c9;                            /* Arka plan rengi */
+/* Ana kolon düzeni */
+.main-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px;
 }
 
-img.sound-icon {                                    /* Ses simgesi */
-    width: 16px;                                        /* Genişlik */
-    height: 16px;                                       /* Yükseklik */
+#sound-column,
+#word-column {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
-#sure-selector {
-    width: 100%;
-    max-width: 200px;
-    font-size: 8px;
-    padding: 2px;
-    border: 1px solid #ccc;
+
+/* Kartlar için ortak stiller */
+.sound-box,
+.word-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Kelime kutusu (Word Box) stilleri */
+.word-box {
+    width: 150px; /* Genişlik */
+    height: 60px; /* Yükseklik */
+    font-size: 16px;
+    text-align: center;
+    color: #333;
+}
+
+.word-box.matched {
+    background-color: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+    cursor: not-allowed;
+}
+
+.word-box.disappear {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+/* Ses kutusu (Sound Box) stilleri */
+.sound-box {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.sound-box img.sound-icon {
+    width: 50%;
+    height: 50%;
+}
+
+.sound-box.matched {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+
+.sound-box.selected {
+    border-color: #ffc107;
+    background-color: #fff3cd;
+}
+
+/* Hover efekti */
+.sound-box:hover,
+.word-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Pagination stilleri */
+#pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+#pagination-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
     border-radius: 5px;
-    appearance: auto; /* Bazı tarayıcılar için */
+    background-color: #007bff;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#pagination-container button:hover {
+    background-color: #0056b3;
+}
+
+#pagination-container button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Responsive tasarım */
+@media (max-width: 600px) {
+    .word-box {
+        width: 120px;
+        height: 50px;
+        font-size: 14px;
+    }
+
+    .sound-box {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1200px) {
+    .word-box {
+        width: 140px;
+        height: 55px;
+        font-size: 15px;
+    }
+
+    .sound-box {
+        width: 90px;
+        height: 90px;
+    }
 }
