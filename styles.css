@@ -87,8 +87,8 @@ h1 {
 
 /* Ses kutusu (Sound Box) stilleri */
 .sound-box {
-    width: 100px;  /* Sabit genişlik */
-    height: 100px; /* Sabit yükseklik */
+    width: 50px;  /* Sabit genişlik */
+    height: 50px; /* Sabit yükseklik */
     position: relative;
 }
 
