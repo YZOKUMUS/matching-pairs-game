@@ -1,42 +1,42 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif;     /* Font ailesi */
 }
 
-#game-container {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+#game-container {                       /* Oyun alanı */
+    max-width: 700px;                   /* Maksimum genişlik */ 
+    margin: 0 auto;                     /* Ortala */
+    text-align: center;                 /* Metni ortala */
 }
 
-.column {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.column {                           /* Sütunlar */
+    display: flex;                      /* Flexbox */
+    flex-wrap: wrap;                    
+    justify-content: center;                /* Yatayda ortala */
 }
 
-.sound-box, .word-box {
-    margin: 10px;
-    padding: 15px;
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
+.sound-box, .word-box {                 /* Ses ve kelime kutuları */
+    margin: 10px;                       /* Kenar boşluğu */
+    padding: 10px;                      /* İç boşluk */
+    background: #f0f0f0;            /* Arka plan rengi */
+    border: 1px solid #ccc;             /* Kenar çizgisi */
+    border-radius: 5px;         /* Kenar yuvarlama */   
+    cursor: pointer;                /* İmleç tipi */
 }
 
-.sound-box.matched, .word-box.matched {
-    background: #c8e6c9;
+.sound-box.matched, .word-box.matched {             /* Eşleşen kutular */
+    background: #c8e6c9;                            /* Arka plan rengi */
 }
 
-img.sound-icon {
-    width: 24px;
-    height: 24px;
+img.sound-icon {                                    /* Ses simgesi */
+    width: 16px;                                        /* Genişlik */
+    height: 16px;                                       /* Yükseklik */
 }
 #sure-selector {
     width: 100%;
-    max-width: 300px;
-    font-size: 16px;
-    padding: 5px;
+    max-width: 200px;
+    font-size: 8px;
+    padding: 2px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    appearance: none; /* Bazı tarayıcılar için */
+    appearance: auto; /* Bazı tarayıcılar için */
 }
