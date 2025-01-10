@@ -53,6 +53,17 @@ function shuffleArray(array) {
 // Populate Sure Selector
 function populateSureSelector(data) {
     const sureSelector = document.getElementById("sure-selector");
+
+sureSelector.addEventListener("change", () => {
+    const selectedSure = sureSelector.value;
+    filterDataBySure(selectedSure); // Seçilen sureye göre filtre uygula
+});
+    
+    
+    
+    
+    
+    
     const sureAdlari = Array.from(new Set(data.map(item => item.sure_adi)));
 
     sureAdlari.forEach(sure => {
