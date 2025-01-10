@@ -106,6 +106,12 @@ h1 {
     border-color: #ffc107;
     background-color: #fff3cd;
 }
+#score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #dee7f1;  /* Buradaki renk, skorun rengidir */
+    margin-bottom: 10px;
+}
 
 /* Hover efekti */
 .sound-box:hover,
