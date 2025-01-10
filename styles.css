@@ -1,19 +1,19 @@
 /* Genel stil ayarları */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f4f4f4;
-    min-height: 100vh;
+body {                                          /* Sayfa genelindeki stil ayarları */
+    font-family: Arial, sans-serif;             /* Font ailesi */
+    margin: 0;                                  /* Sayfa kenar boşlukları */
+    padding: 0;                                 /* Sayfa iç boşlukları */
+    display: flex;                              /* Flexbox kullanımı */
+    flex-direction: column;                     /* Dikey sıralama */
+    align-items: center;                        /* Yatayda merkezleme */
+    justify-content: center;                    /* Dikeyde merkezleme */
+    background-color: #0d7dc7;                  /* Sayfa arka plan rengi */
+    min-height: 100vh;                              /* Sayfa yüksekliği */
 }
 
-header {
-    text-align: center;
-    margin-bottom: 20px;
+header {                                        /* Başlık alanı stil ayarları */
+    text-align: center;                         /* Metin hizalama */
+    margin-bottom: 10px;                        /* Alt boşluk */
 }
 
 h1 {
