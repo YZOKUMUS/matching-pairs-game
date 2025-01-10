@@ -1,119 +1,33 @@
 body {
-    font-family: Arial, sans-serif;     /* Yazı tipi */
-    margin: 0;                          /* Kenar boşluğu */
-    padding: 0;                         /* İç boşluk */
-    display: flex;                      /* Kutuları yatay düzende hizalamak için */
-    flex-direction: column;             /* Kutuları sütun düzende hizalamak için */
-    align-items: center;               /* Kutuları yatayda ortalamak için */
-    justify-content: center;            /* Kutuları dikeyde ortalamak için */
-    height: 100vh;                      /* Ekranın tamamını kaplamak için */
-    background-color: #8990f3;          /* Arka plan rengi */
+    font-family: Arial, sans-serif;
 }
 
-#score-container {            /* Puan kutusu */
-    font-size: 20px;            /* Yazı tipi boyutu */
-    font-weight: bold;          /* Kalın yazı tipi */
-    margin: 10px;               /* Kenar boşluğu */
-    color: #333;                /* Yazı rengi */
-    text-align: center;         /* Metni ortalamak için */
-}
-
-#game-container {       /* Oyun kutusu */
-    display: flex;      /* Kutuları yatay düzende hizalamak için */
-    flex-direction: column; /* Daha küçük ekranlar için sütun düzeni */
-    align-items: center;            /* Kutuları yatayda ortalamak için */
-    width: 90%;         /* Kutunun genişliği */
-    margin: 10px 0;     /* Kenar boşluğu */
+#game-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .column {
-    width: 100%; /* Tam genişlik */
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px; /* Kolonlar arası boşluk */
 }
 
 .sound-box, .word-box {
-    width: 22%; /* Ekranın genişliğine göre oran */
-    max-width: 100px; /* Maksimum genişlik */
-    height: 50px;                   /* Kutu yüksekliği */
-    display: flex;                  /* Kutuları yatay düzende hizalamak için */
-    align-items: center;            /* Metni yatayda ortalamak için */
-    justify-content: center;        /* Metni ortalamak için */
-    border: 1px solid #ccc;     /* Kenar çizgisi */
-    border-radius: 5px;             /* Köşeleri yuvarlamak için */
-    background-color: rgba(255, 255, 255, 0);        /* Arka plan rengi */
+    margin: 10px;
+    padding: 15px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     cursor: pointer;
-    text-align: center;
-    font-size: 14px; /* Daha küçük metin */
 }
 
-.sound-box.selected {
-    background-color: #19b6eb;      /* Seçilen kutunun arka plan rengi */
+.sound-box.matched, .word-box.matched {
+    background: #c8e6c9;
 }
 
-.matched {
-    background-color: #90ee90;      /* Eşleşen kutunun arka plan rengi */
-    pointer-events: none;               /* Eşleşen kutuya tıklanamaz */
-}
-
-#pagination-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-button {                                    /* Düğme stilleri */
-    margin: 0 5px;
-    padding: 10px 20px;
-    border: none;                           /* Kenar çizgisi yok */
-    background-color: #007bff;          /* Düğme rengi */
-    color: white;                           /* Yazı rengi */    
-    border-radius: 5px;                     /* Köşeleri yuvarlamak için */
-    cursor: pointer;
-    font-size: 14px; /* Daha küçük metin */
-}
-
-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-/* Medya Sorguları */
-@media (max-width: 768px) {
-    .sound-box, .word-box {
-        width: 45%; /* Daha küçük cihazlar için genişlik */
-        height: 40px;
-        font-size: 12px;
-    }
-
-    button {
-        padding: 8px 16px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .sound-box, .word-box {
-        width: 90%; /* Küçük ekranlar için tam genişlik */
-        height: 35px;
-        font-size: 10px;
-    }
-
-    button {
-        padding: 6px 12px;
-        font-size: 10px;
-    }
-}
-.disappear {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-.sound-icon {
-    width: 40px; /* Simgenin genişliği */
-    height: 40px; /* Simgenin yüksekliği */
-    display: block;
-    margin: auto; /* Simgeyi kutu içinde ortalamak için */
+img.sound-icon {
+    width: 24px;
+    height: 24px;
 }
