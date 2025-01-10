@@ -156,7 +156,7 @@ h1 {
     }
 }
 
-@media (min-width: 601px) and (max-width: 1200px) {
+@media (min-width: 1080px) and (max-width: 2480px) {
     .word-box {
         width: 140px; /* Orta ekranlar için daha geniş boyut */
         height: 55px;
