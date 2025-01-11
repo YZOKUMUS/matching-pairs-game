@@ -24,42 +24,6 @@
             <div id="pagination-container"></div>
         </footer>
     </div>
-    <script>
-        // JSON'dan sure ve kelime verilerini dinamik olarak yükleme
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('data.json')
-                .then(response => response.json())
-                .then(data => {
-                    // Sureleri doldurma
-                    const sureSelector = document.getElementById('sure-selector');
-                    const sureler = [...new Set(data.map(item => item.sure_adi))];
-                    sureler.forEach(sure => {
-                        const option = document.createElement('option');
-                        option.value = sure;
-                        option.textContent = sure;
-                        sureSelector.appendChild(option);
-                    });
-
-                    // Oyun kolonlarını doldurma
-                    const soundColumn = document.getElementById('sound-column');
-                    const wordColumn = document.getElementById('word-column');
-                    data.forEach(item => {
-                        const soundButton = document.createElement('button');
-                        soundButton.textContent = "▶️";
-                        soundButton.addEventListener('click', () => {
-                            const audio = new Audio(item.sound_url);
-                            audio.play();
-                        });
-                        soundColumn.appendChild(soundButton);
-
-                        const wordButton = document.createElement('button');
-                        wordButton.textContent = item.turkish_meaning;
-                        wordColumn.appendChild(wordButton);
-                    });
-                })
-                .catch(error => console.error('JSON yüklenirken hata oluştu:', error));
-        });
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
