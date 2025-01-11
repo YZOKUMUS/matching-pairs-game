@@ -18,18 +18,18 @@ header {
 }
 
 h1 {
-    color: #333;
+    color: #333;                            /* Başlık rengi */
 }
 
 #score {
-    font-size: 24px;
-    font-weight: bold;
-    color: #007bff;
+    font-size: 24px;                            /* Skor font büyüklüğü */
+    font-weight: bold;                          /* Kalın font */
+    color: #007bff;                                 /* Skor rengi */
     margin-bottom: 10px;
 }
 
 /* Ana kolon düzeni */
-.main-container {
+.main-container {                               /* Ana kolon */
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -73,10 +73,10 @@ h1 {
 }
 
 .word-box.matched {
-    background-color: #d4edda;
-    border-color: #28a745;
-    color: #155724;
-    cursor: not-allowed;
+    background-color: #d4edda;              /* Eşleşen kart rengi */
+    border-color: #28a745;                      /* Eşleşen kart kenar rengi */
+    color: #155724;                             /* Eşleşen kart metin rengi */
+    cursor: not-allowed;                            /* Eşleşen kartın tıklanamaz olması */
 }
 
 .word-box.disappear {

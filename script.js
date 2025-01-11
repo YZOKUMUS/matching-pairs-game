@@ -7,32 +7,32 @@ let data = [];
 let score = 0;
 
 // Helper function to update score display
-function updateScoreDisplay() {
-    const scoreElement = document.getElementById("score");
-    scoreElement.textContent = score;
+function updateScoreDisplay() {                                         /* Skorun görüntüsünü güncelleyen yardımcı fonksiyon */
+    const scoreElement = document.getElementById("score");              /* Skorun görüntüsünü güncelleyen yardımcı fonksiyon */
+    scoreElement.textContent = score;                                   /* Skorun görüntüsünü güncelleyen yardımcı fonksiyon */
 }
 
 // Helper function to save the game state
-function saveGameState() {
-    try {
+function saveGameState() {                                              /* Oyun durumunu kaydetmek için yardımcı fonksiyon */
+    try {                                                               /* Oyun durumunu kaydetmek için yardımcı fonksiyon */
         const gameState = {
             currentPage,
-            matchedItems: Array.from(currentMatchedItems),
+            matchedItems: Array.from(currentMatchedItems),              /* Oyun durumunu kaydetmek için yardımcı fonksiyon */
             score,
         };
-        localStorage.setItem("gameState", JSON.stringify(gameState));
+        localStorage.setItem("gameState", JSON.stringify(gameState));   /* Oyun durumunu kaydetmek için yardımcı fonksiyon */
     } catch (e) {
-        console.error("Failed to save game state:", e);
+        console.error("Failed to save game state:", e);                /* Oyun durumunu kaydetmek için yardımcı fonksiyon */
     }
 }
 
 // Helper function to load the game state
-function loadGameState() {
+function loadGameState() {                                             /* Oyun durumunu yüklemek için yardımcı fonksiyon */
     try {
-        const savedState = localStorage.getItem("gameState");
+        const savedState = localStorage.getItem("gameState");          /* Oyun durumunu yüklemek için yardımcı fonksiyon */
         if (savedState) {
             const { currentPage: savedPage, matchedItems: savedMatchedItems, score: savedScore } = JSON.parse(savedState);
-            currentPage = savedPage || 0;
+            currentPage = savedPage || 0;                               /* Oyun durumunu yüklemek için yardımcı fonksiyon */
             currentMatchedItems = new Set(savedMatchedItems || []);
             score = savedScore || 0;
             updateScoreDisplay();
@@ -42,11 +42,11 @@ function loadGameState() {
     }
 }
 
-// Shuffle function to randomize the order
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+// Shuffle function to randomize the order                              
+function shuffleArray(array) {                                          /* Diziyi karıştırmak için yardımcı fonksiyon */
+    for (let i = array.length - 1; i > 0; i--) {                        /* Diziyi karıştırmak için yardımcı fonksiyon */
+        const j = Math.floor(Math.random() * (i + 1));                  /* Diziyi karıştırmak için yardımcı fonksiyon */
+        [array[i], array[j]] = [array[j], array[i]];                    /* Diziyi karıştırmak için yardımcı fonksiyon */
     }
 }
 
